@@ -11,7 +11,7 @@ import UIKit
 
 class CalculateViewController: UIViewController {
     
-    var bmiValue = "0.0"
+    var calculatorBrain = CalculatorBrain()
 
     @IBOutlet weak var heightLabel: UILabel!
     @IBOutlet weak var weightLabel: UILabel!
@@ -26,7 +26,9 @@ class CalculateViewController: UIViewController {
     //Print value of height slider in console
     @IBAction func heightSliderChanged(_ sender: UISlider) {
         //Turn slider value into string and format for 2 decimal places
-        heightLabel.text = "\(String(format: "%.2f", sender.value)) ft"
+        let x = Int(sender.value)
+        let (q, r) = x.quotientAndRemainder(dividingBy: 12)
+        heightLabel.text = "\(q) ft \(r) in"
     }
     
     //Print value of weight slider in console
@@ -36,16 +38,10 @@ class CalculateViewController: UIViewController {
     }
     
     @IBAction func calculatePressed(_ sender: UIButton) {
-        var height = heightSlider.value
-        var weight = weightSlider.value
+        let height = heightSlider.value
+        let weight = weightSlider.value
         
-        // BMI = Weight(KG) / Height(m)^2
-        // first convert lbs to kg and ft to m
-        height = height * 0.3048
-        weight = weight * 0.453592
-        
-        let BMI = weight / pow(height, 2)
-        bmiValue = String(format: "%.1f", BMI)
+        calculatorBrain.calculateBMI(height: height, weight: weight)
         
         //let secondVC = SecondViewController()
         //secondVC.bmiValue = String(format: "%.1f", BMI)
@@ -59,7 +55,7 @@ class CalculateViewController: UIViewController {
         if segue.identifier == "goToResult" {
             // VC that will be init when segue is performed
             let destinationVC = segue.destination as! ResultViewController // narrow down the datatype of UIViewController to ResultViewController using downcasting
-            destinationVC.bmiValue = bmiValue
+            destinationVC.bmiValue = calculatorBrain.getBMIValue()
         }
     }
     
