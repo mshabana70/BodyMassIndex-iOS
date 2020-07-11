@@ -56,6 +56,8 @@ class CalculateViewController: UIViewController {
             // VC that will be init when segue is performed
             let destinationVC = segue.destination as! ResultViewController // narrow down the datatype of UIViewController to ResultViewController using downcasting
             destinationVC.bmiValue = calculatorBrain.getBMIValue()
+            destinationVC.advice = calculatorBrain.getAdvice()
+            destinationVC.color = calculatorBrain.getColor()
         }
     }
     
